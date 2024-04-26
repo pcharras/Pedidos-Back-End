@@ -42,3 +42,6 @@ class PedidoService:
     @staticmethod
     def get_all_pedidos():
         return Pedido.query.all()
+    @staticmethod
+    def get_pedidos_by_grupo(id_grupo):
+        return Pedido.query.filter_by(id_grupo=id_grupo).all()

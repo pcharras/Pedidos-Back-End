@@ -33,6 +33,11 @@ class PedidoListResource(Resource):
         data = request.get_json()
         pedido = PedidoService.create_pedido(**data)
         return jsonify(pedido.serialize())
-
+class PedidosPorGrupoResource(Resource):
+    def get(self, id_grupo):
+        pedidos = PedidoService.get_pedidos_by_grupo(id_grupo)
+        return jsonify([pedido.serialize() for pedido in pedidos])
+    
 api.add_resource(PedidoResource, '/pedidos/<int:id>')
 api.add_resource(PedidoListResource, '/pedidos')
+api.add_resource(PedidosPorGrupoResource, '/pedidos/grupo/<int:id_grupo>')
