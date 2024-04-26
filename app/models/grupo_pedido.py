@@ -11,7 +11,7 @@ class GrupoPedido(db.Model):
     fecha_hora_envio = db.Column(db.TIMESTAMP)
     id_estado = db.Column(db.Integer, db.ForeignKey('estados.id'), nullable=False)
     estado = db.relationship('Estado', backref='grupos_pedidos')
-    id_cadete = db.Column(db.Integer, db.ForeignKey('cadetes.id'), nullable=False)
+    id_cadete = db.Column(db.Integer, db.ForeignKey('cadetes.id'), nullable=True)
     cadete = db.relationship('Cadete', backref='grupos_pedidos')
 
     def serialize(self):
@@ -29,9 +29,9 @@ class GrupoPedido(db.Model):
                 "nombre": self.estado.nombre
             },
             "cadete": {
-                "id": self.cadete.id,
-                "nombre": self.cadete.nombre,
-                "activo": self.cadete.activo 
+                "id": self.cadete.id if self.cadete else None,
+                "nombre": self.cadete.nombre if self.cadete else None,
+                "activo": self.cadete.activo if self.cadete else None
             }
         }
     
