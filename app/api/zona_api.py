@@ -23,8 +23,8 @@ class ZonaResource(Resource):
 
     def delete(self, id):
         if ZonaService.delete_zona(id):
-            return {'message': 'Zona deleted'}, 200
-        return {'message': 'Zona not found'}, 404
+            return {'message': 'Zona deleted'}
+        return {'message': 'Zona not found'}
 
 class ZonaListResource(Resource):
     def get(self):
@@ -34,7 +34,7 @@ class ZonaListResource(Resource):
     def post(self):
         data = request.get_json()
         zona = ZonaService.create_zona(**data)
-        return jsonify(zona.serialize()), 201
+        return jsonify(zona.serialize())
 
 class ZonaFinderResource(Resource):
     def get(self):
