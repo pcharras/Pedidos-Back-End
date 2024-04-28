@@ -42,7 +42,8 @@ class GrupoPedido(db.Model):
         self.fecha_hora_envio = fecha_hora_envio
         self.id_estado = id_estado
         self.id_cadete = id_cadete
-
+        
+        
 # class GrupoPedido(db.Model):
 #     __tablename__ = 'grupos_pedidos'
 
