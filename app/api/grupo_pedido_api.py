@@ -16,7 +16,7 @@ class GrupoPedidoResource(Resource):
         data = request.get_json()
         grupo_pedido = GrupoPedidoService.update_grupo_pedido(id, **data)
         if grupo_pedido:
-            return jsonify(grupo_pedido.serialize())
+            return jsonify(grupo_pedido)
         return {'message': 'Grupo de pedido no encontrado'}, 404
 
     def delete(self, id):

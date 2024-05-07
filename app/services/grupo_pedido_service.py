@@ -31,7 +31,30 @@ class GrupoPedidoService:
             if fecha_hora_envio:
                 grupo_pedido.fecha_hora_envio = fecha_hora_envio
             db.session.commit()
-        return grupo_pedido
+            # Obtener los pedidos asociados a este grupo de pedidos
+            pedidos = Pedido.query.filter_by(id_grupo=grupo_pedido.id).all()
+            grupo_serializado = {
+                "id": grupo_pedido.id,
+                "zona": {
+                    "id": grupo_pedido.zona.id,
+                    "nombre": grupo_pedido.zona.nombre
+                },
+                "fecha_hora_creacion": grupo_pedido.fecha_hora_creacion.isoformat() if grupo_pedido.fecha_hora_creacion else None,
+                "fecha_hora_cierre": grupo_pedido.fecha_hora_cierre.isoformat() if grupo_pedido.fecha_hora_cierre else None,
+                "fecha_hora_envio": grupo_pedido.fecha_hora_envio.isoformat() if grupo_pedido.fecha_hora_envio else None,
+                "estado": {
+                    "id": grupo_pedido.estado.id,
+                    "nombre": grupo_pedido.estado.nombre
+                },
+                "cadete": {
+                    "id": grupo_pedido.cadete.id if grupo_pedido.cadete else None,
+                    "nombre": grupo_pedido.cadete.nombre if grupo_pedido.cadete else None,
+                    "activo": grupo_pedido.cadete.activo if grupo_pedido.cadete else None
+                },
+                "pedidos": [pedido.serialize() for pedido in pedidos]
+            }
+            return grupo_serializado
+        return None
 
     @staticmethod
     def delete_grupo_pedido(grupo_pedido_id):
