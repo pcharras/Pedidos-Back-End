@@ -27,7 +27,7 @@ class PedidoService:
         return new_pedido
 
     @staticmethod
-    def update_pedido(pedido_id, id_grupo=None, direccion=None, latitud=None, longitud=None, id_estado=None, cliente=None, pedido=None, telefono=None):
+    def update_pedido(pedido_id, id_grupo=None, direccion=None, latitud=None, longitud=None, id_estado=None, cliente=None, pedido_nuevo=None, telefono=None):
         pedido = PedidoService.get_pedido_by_id(pedido_id)
         if pedido:
             if id_grupo is not None:
@@ -42,8 +42,8 @@ class PedidoService:
                 pedido.id_estado = id_estado
             if cliente is not None:
                 pedido.cliente = cliente
-            if pedido is not None:
-                pedido.pedido = pedido
+            if pedido_nuevo is not None:
+                pedido.pedido = pedido_nuevo
             if telefono is not None:
                 pedido.telefono = telefono
             db.session.commit()
