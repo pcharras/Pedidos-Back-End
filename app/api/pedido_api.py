@@ -14,6 +14,7 @@ class PedidoResource(Resource):
 
     def put(self, id):
         data = request.get_json()
+        print(data)
         pedido = PedidoService.update_pedido(id, **data)
         if pedido:
             return jsonify(pedido.serialize())
