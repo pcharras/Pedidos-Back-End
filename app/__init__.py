@@ -46,6 +46,9 @@ def create_app():
     
     from app.api.pedido_api import pedido_api_blueprint
     app.register_blueprint(pedido_api_blueprint,url_prefix='/api')
+    
+    from app.api.email_api import email_api_blueprint
+    app.register_blueprint(email_api_blueprint, url_prefix='/api') 
 
     from app.auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
