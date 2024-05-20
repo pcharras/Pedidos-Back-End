@@ -5,7 +5,10 @@ from app.models import Estado, Parametro
 parametros = [
     {"nombre": "MaxPedidosPorGrupo", "valor": "5"},
     {"nombre": "MaxEsperaPorGrupo", "valor": "40"},
-    {"nombre": "Ciudad", "valor": "Carlos Paz"}
+    {"nombre": "Ciudad", "valor": "Carlos Paz"},
+    {"nombre": "EmailInformes", "valor": "oaxacaappedidos@gmail.com"},
+    {"nombre": "horasInformeDiario", "valor": "20"},
+    {"nombre": "ultimoInforme", "valor": ""}
 ]
 app = create_app()
 

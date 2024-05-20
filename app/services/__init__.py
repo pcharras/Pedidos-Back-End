@@ -10,3 +10,5 @@ from app.services.estado_service import EstadoService
 from app.services.grupo_pedido_service import GrupoPedidoService
 from app.services.pedido_service import PedidoService
 from app.services.parametro_service import ParametroService
+
+from app.services.email_service import EmailService
