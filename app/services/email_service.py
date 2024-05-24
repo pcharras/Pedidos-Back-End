@@ -25,7 +25,7 @@ class EmailService:
 
         try:
             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-                smtp.login(sender_email, "dowp okge akui ckkw")
+                smtp.login(oaxacaappedidos@gmail.com, "dowp okge akui ckkw")
                 smtp.send_message(msg)
             return True, 'Correo enviado con éxito'
         except Exception as e:
