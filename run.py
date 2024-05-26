@@ -1,5 +1,6 @@
 from app import create_app, db
 from app.models import Estado, Parametro
+from app.backup.backup_scheduler import schedule_backup
 # Aquí puedes configurar el entorno o cualquier otro ajuste previo al lanzamiento
 # Por ejemplo, puedes establecer variables de entorno
 parametros = [
@@ -8,8 +9,12 @@ parametros = [
     {"nombre": "Ciudad", "valor": "Carlos Paz"},
     {"nombre": "EmailInformes", "valor": "oaxacaappedidos@gmail.com"},
     {"nombre": "horasInformeDiario", "valor": "20"},
-    {"nombre": "ultimoInforme", "valor": ""}
+    {"nombre": "ultimoInforme", "valor": ""},
+    {"nombre": "Hora_Backup", "valor": "02:00"},
+    {"nombre": "Backup_Folder", "valor": r"C:\Users"},
+    {"nombre": "Ultimo_Backup", "valor": ""}
 ]
+
 app = create_app()
 
 with app.app_context():
@@ -27,8 +32,9 @@ with app.app_context():
             db.session.add(nuevo_parametro)
             db.session.commit()
     print('Parámetros cargados...')
-
+    schedule_backup()
 if __name__ == '__main__':
+   
     # Aquí puedes configurar opciones adicionales para la ejecución del servidor
     # como el puerto, el modo de depuración, etc.
     app.run(debug=True,host='127.0.0.1',port=8000) # Cambia debug a False en un entorno de producción
