@@ -5,11 +5,11 @@ from app.backup.backup_scheduler import schedule_backup
 class ParametroService:
     @staticmethod
     def get_parametro_by_id(parametro_id):
-        return Parametro.query.get(parametro_id)
+        return Parametro.query.filter_by(id=parametro_id, is_deleted=False).first()
     
     @staticmethod
     def get_parametro_by_nombre(nombre):
-        return Parametro.query.filter_by(nombre=nombre).first()
+        return Parametro.query.filter_by(nombre=nombre, is_deleted=False).first()
 
     @staticmethod
     def create_parametro(nombre, valor):
@@ -20,8 +20,7 @@ class ParametroService:
 
     @staticmethod
     def update_parametro(parametro_id, nombre=None, valor=None):
-        parametro = Parametro.query.get(parametro_id)
-        print("se esta modificando hora del backup?",parametro.nombre)
+        parametro = ParametroService.get_parametro_by_id(parametro_id)
         if parametro:
             if nombre is not None:
                 parametro.nombre = nombre
@@ -29,10 +28,8 @@ class ParametroService:
                 parametro.valor = valor
             db.session.commit()
 
-            # Verificar si el parámetro actualizado es Hora_Backup y, si lo es, actualizar la programación autom
-            
+            # Verificar si el parámetro actualizado es Hora_Backup y, si lo es, actualizar la programación
             if parametro.nombre == "Hora_Backup":
-                print("actualizar hora de backup")
                 schedule_backup()
 
         return parametro
@@ -41,11 +38,11 @@ class ParametroService:
     def delete_parametro(parametro_id):
         parametro = ParametroService.get_parametro_by_id(parametro_id)
         if parametro:
-            db.session.delete(parametro)
+            parametro.is_deleted = True  # Borrado lógico
             db.session.commit()
             return True
         return False
 
     @staticmethod
     def get_all_parametros():
-        return Parametro.query.all()
+        return Parametro.query.filter_by(is_deleted=False).all()

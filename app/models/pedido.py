@@ -12,7 +12,8 @@ class Pedido(db.Model):
     cliente = db.Column(db.String(250), nullable=False)  # Ajustado de ARRAY a VARCHAR(250)
     pedido = db.Column(db.String(600), nullable=False)
     telefono = db.Column(db.String(60), nullable=False)
-    
+    is_deleted = db.Column(db.Boolean, default=False, nullable=False)  # Nuevo campo
+
     # Relaciones
     grupo = db.relationship('GrupoPedido', backref=db.backref('pedidos', lazy=True))
     estado = db.relationship('Estado', backref=db.backref('pedidos', lazy=True))
@@ -26,6 +27,7 @@ class Pedido(db.Model):
         self.cliente = cliente  # Ahora un string simple
         self.pedido = pedido
         self.telefono = telefono
+        self.is_deleted = False  # Valor predeterminado
 
     def serialize(self):
         return {
@@ -38,6 +40,7 @@ class Pedido(db.Model):
             "cliente": self.cliente, 
             "pedido": self.pedido,
             "telefono": self.telefono,
+            "is_deleted": self.is_deleted,  # Nuevo campo en la serialización
             "grupo": self.grupo.serialize() if self.grupo else None,
             "estado": self.estado.serialize() if self.estado else None,
         }

@@ -4,7 +4,7 @@ from app import db
 class CadeteService:
     @staticmethod
     def get_cadete_by_id(cadete_id):
-        return Cadete.query.get(cadete_id)
+        return Cadete.query.filter_by(id=cadete_id, is_deleted=False).first()
 
     @staticmethod
     def create_cadete(nombre, activo, telefono=None):
@@ -30,11 +30,11 @@ class CadeteService:
     def delete_cadete(cadete_id):
         cadete = CadeteService.get_cadete_by_id(cadete_id)
         if cadete:
-            db.session.delete(cadete)
+            cadete.is_deleted = True  # Borrado lógico
             db.session.commit()
             return True
         return False
 
     @staticmethod
     def get_all_cadetes():
-        return Cadete.query.all()
+        return Cadete.query.filter_by(is_deleted=False).all()

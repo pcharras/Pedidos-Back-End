@@ -5,7 +5,7 @@ from datetime import datetime
 class GrupoPedidoService:
     @staticmethod
     def get_grupo_pedido_by_id(grupo_pedido_id):
-        return GrupoPedido.query.get(grupo_pedido_id)
+        return GrupoPedido.query.filter_by(id=grupo_pedido_id, is_deleted=False).first()
 
     @staticmethod
     def create_grupo_pedido(id_zona, fecha_hora_creacion, id_estado, id_cadete, fecha_hora_cierre=None, fecha_hora_envio=None):
@@ -38,19 +38,19 @@ class GrupoPedidoService:
                 "zona": {
                     "id": grupo_pedido.zona.id,
                     "nombre": grupo_pedido.zona.nombre
-                },
+                } if grupo_pedido.zona else None,
                 "fecha_hora_creacion": grupo_pedido.fecha_hora_creacion.isoformat() if grupo_pedido.fecha_hora_creacion else None,
                 "fecha_hora_cierre": grupo_pedido.fecha_hora_cierre.isoformat() if grupo_pedido.fecha_hora_cierre else None,
                 "fecha_hora_envio": grupo_pedido.fecha_hora_envio.isoformat() if grupo_pedido.fecha_hora_envio else None,
                 "estado": {
                     "id": grupo_pedido.estado.id,
                     "nombre": grupo_pedido.estado.nombre
-                },
+                } if grupo_pedido.estado else None,
                 "cadete": {
                     "id": grupo_pedido.cadete.id if grupo_pedido.cadete else None,
                     "nombre": grupo_pedido.cadete.nombre if grupo_pedido.cadete else None,
                     "activo": grupo_pedido.cadete.activo if grupo_pedido.cadete else None
-                },
+                } if grupo_pedido.cadete else None,
                 "pedidos": [pedido.serialize() for pedido in pedidos]
             }
             return grupo_serializado
@@ -60,18 +60,18 @@ class GrupoPedidoService:
     def delete_grupo_pedido(grupo_pedido_id):
         grupo_pedido = GrupoPedidoService.get_grupo_pedido_by_id(grupo_pedido_id)
         if grupo_pedido:
-            db.session.delete(grupo_pedido)
+            grupo_pedido.is_deleted = True  # Borrado lógico
             db.session.commit()
             return True
         return False
 
     @staticmethod
     def get_all_grupos_pedidos():
-        return GrupoPedido.query.all()
+        return GrupoPedido.query.filter_by(is_deleted=False).all()
     
     @staticmethod
     def get_all_grupos_pedidos_with_pedidos():
-        grupos_pedidos = GrupoPedido.query.all()
+        grupos_pedidos = GrupoPedido.query.filter_by(is_deleted=False).all()
         grupos_serializados = []
         for grupo_pedido in grupos_pedidos:
             # Obtener los pedidos asociados a este grupo de pedidos
@@ -82,19 +82,19 @@ class GrupoPedidoService:
                 "zona": {
                     "id": grupo_pedido.zona.id,
                     "nombre": grupo_pedido.zona.nombre
-                },
+                } if grupo_pedido.zona else None,
                 "fecha_hora_creacion": grupo_pedido.fecha_hora_creacion.isoformat() if grupo_pedido.fecha_hora_creacion else None,
                 "fecha_hora_cierre": grupo_pedido.fecha_hora_cierre.isoformat() if grupo_pedido.fecha_hora_cierre else None,
                 "fecha_hora_envio": grupo_pedido.fecha_hora_envio.isoformat() if grupo_pedido.fecha_hora_envio else None,
                 "estado": {
                     "id": grupo_pedido.estado.id,
                     "nombre": grupo_pedido.estado.nombre
-                },
+                } if grupo_pedido.estado else None,
                 "cadete": {
                     "id": grupo_pedido.cadete.id if grupo_pedido.cadete else None,
                     "nombre": grupo_pedido.cadete.nombre if grupo_pedido.cadete else None,
                     "activo": grupo_pedido.cadete.activo if grupo_pedido.cadete else None
-                },
+                } if grupo_pedido.cadete else None,
                 "pedidos": [pedido.serialize() for pedido in pedidos]
             }
             grupos_serializados.append(grupo_serializado)

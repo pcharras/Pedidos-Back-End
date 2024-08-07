@@ -4,7 +4,7 @@ from app import db
 class PuntoPoligonoZonaService:
     @staticmethod
     def get_punto_by_id(punto_id):
-        return PuntoPoligonoZona.query.get(punto_id)
+        return PuntoPoligonoZona.query.filter_by(id=punto_id, is_deleted=False).first()
 
     @staticmethod
     def create_punto(latitud, longitud, zona_id):
@@ -30,11 +30,11 @@ class PuntoPoligonoZonaService:
     def delete_punto(punto_id):
         punto = PuntoPoligonoZonaService.get_punto_by_id(punto_id)
         if punto:
-            db.session.delete(punto)
+            punto.is_deleted = True  # Borrado lógico
             db.session.commit()
             return True
         return False
 
     @staticmethod
     def get_all_puntos():
-        return PuntoPoligonoZona.query.all()
+        return PuntoPoligonoZona.query.filter_by(is_deleted=False).all()

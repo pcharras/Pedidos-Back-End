@@ -8,7 +8,7 @@ class ZonaService:
     @staticmethod
     def get_zona_by_id(zona_id):
         """Retrieves a zona by its ID from the database."""
-        return Zona.query.get(zona_id)
+        return Zona.query.filter_by(id=zona_id, is_deleted=False).first()
 
     @staticmethod
     def create_zona(nombre, layer=None):
@@ -36,7 +36,7 @@ class ZonaService:
         """Deletes a zona from the database."""
         zona = ZonaService.get_zona_by_id(zona_id)
         if zona:
-            db.session.delete(zona)
+            zona.is_deleted = True  # Borrado lógico
             db.session.commit()
             return True
         return False
@@ -44,7 +44,7 @@ class ZonaService:
     @staticmethod
     def get_all_zonas():
         """Retrieves all zonas from the database."""
-        return Zona.query.all()
+        return Zona.query.filter_by(is_deleted=False).all()
 
     @staticmethod
     def get_coordinates(address):

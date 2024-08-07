@@ -7,19 +7,22 @@ class PuntoPoligonoZona(db.Model):
     latitud = db.Column(db.Numeric(9,6), nullable=False)
     longitud = db.Column(db.Numeric(9,6), nullable=False)
     zona_id = db.Column(db.Integer, db.ForeignKey('zonas.id'), nullable=False)
+    is_deleted = db.Column(db.Boolean, default=False, nullable=False)  # Nuevo campo
 
     def serialize(self):
         return {
             "id": self.id,
             "latitud": str(self.latitud),
             "longitud": str(self.longitud),
-            "zona_id": self.zona_id
+            "zona_id": self.zona_id,
+            "is_deleted": self.is_deleted  # Nuevo campo en la serialización
         }
-    
+
     def __init__(self, latitud, longitud, zona_id):
         self.latitud = latitud
         self.longitud = longitud
         self.zona_id = zona_id
+        self.is_deleted = False  # Valor predeterminado
 
     def __repr__(self):
-        return f"<PuntoPoligonoZona {self.id}: Latitud={self.latitud}, Longitud={self.longitud}, Zona ID={self.zona_id}>"
+        return f"<PuntoPoligonoZona {self.id}: Latitud={self.latitud}, Longitud={self.longitud}, Zona ID={self.zona_id}, {'Eliminado' if self.is_deleted else 'No Eliminado'}>"

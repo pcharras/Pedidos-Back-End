@@ -4,11 +4,11 @@ from app import db
 class PedidoService:
     @staticmethod
     def get_pedido_by_id(pedido_id):
-        return Pedido.query.get(pedido_id)
+        return Pedido.query.filter_by(id=pedido_id, is_deleted=False).first()
 
     @staticmethod
     def get_pedidos_by_grupo(id_grupo):
-        return Pedido.query.filter_by(id_grupo=id_grupo).all()
+        return Pedido.query.filter_by(id_grupo=id_grupo, is_deleted=False).all()
 
     @staticmethod
     def create_pedido(id_grupo, direccion, latitud, longitud, id_estado, cliente, pedido, telefono):
@@ -53,11 +53,11 @@ class PedidoService:
     def delete_pedido(pedido_id):
         pedido = PedidoService.get_pedido_by_id(pedido_id)
         if pedido:
-            db.session.delete(pedido)
+            pedido.is_deleted = True  # Borrado lógico
             db.session.commit()
             return True
         return False
 
     @staticmethod
     def get_all_pedidos():
-        return Pedido.query.all()
+        return Pedido.query.filter_by(is_deleted=False).all()
